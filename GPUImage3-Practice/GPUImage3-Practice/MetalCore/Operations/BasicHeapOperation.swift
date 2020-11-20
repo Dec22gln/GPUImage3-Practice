@@ -36,7 +36,7 @@ open class BasicHeapOperation: BasicOperation {
             
             var outputTexture: Texture
             
-            // 通过 MTLHeap 创建 MTLTexture ----------
+            // 通过 MTLHeap 创建 MTLTexture
             let textureDescriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .bgra8Unorm,
                                                                              width: outputWidth,
                                                                              height: outputHeight,
@@ -45,11 +45,11 @@ open class BasicHeapOperation: BasicOperation {
             textureDescriptor.storageMode = .private
             
             if self.textureHeap == nil{
-                makeHeap(size: CGSize(width: outputWidth, height: outputHeight))
+                createHeap(size: CGSize(width: outputWidth, height: outputHeight))
             }
             
             if (self.textureHeap!.currentAllocatedSize <  outputWidth * outputHeight * 12 ){
-                makeHeap(size: CGSize(width: outputWidth, height: outputHeight))
+                createHeap(size: CGSize(width: outputWidth, height: outputHeight))
             }
             
             
@@ -67,8 +67,10 @@ open class BasicHeapOperation: BasicOperation {
         }
     }
     
-    func makeHeap(size:CGSize ,textureDescriptor:MTLTextureDescriptor? = nil ){
-        print("makeHeap:\(size)")
+    func createHeap(size:CGSize ,textureDescriptor:MTLTextureDescriptor? = nil ){
+        #if DEBUG
+        print("createHeap:\(size)")
+        #endif
         var descriptor = textureDescriptor
         
         if nil == descriptor {

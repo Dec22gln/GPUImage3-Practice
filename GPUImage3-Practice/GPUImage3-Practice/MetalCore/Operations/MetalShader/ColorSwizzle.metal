@@ -3,6 +3,7 @@
 
 using namespace metal;
 
+//rgba to gbra ?
 fragment half4 colorSwizzleFragment(SingleInputVertexIO fragmentInput [[stage_in]],
                                    texture2d<half> inputTexture [[texture(0)]])
 {

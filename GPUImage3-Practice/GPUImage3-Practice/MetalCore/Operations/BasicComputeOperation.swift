@@ -56,11 +56,11 @@ class BasicComputeOperation: ImageProcessingOperation {
             outputHeight = firstInputTexture.texture.height
             
             if self.textureHeap == nil{
-                makeHeap(size: CGSize(width: outputWidth, height: outputHeight))
+                createHeap(size: CGSize(width: outputWidth, height: outputHeight))
             }
             
             if (self.textureHeap!.currentAllocatedSize <  outputWidth * outputHeight * 12 ){
-                makeHeap(size: CGSize(width: outputWidth, height: outputHeight))
+                createHeap(size: CGSize(width: outputWidth, height: outputHeight))
             }
 
             
@@ -97,16 +97,13 @@ class BasicComputeOperation: ImageProcessingOperation {
             
             computeEncoder.endEncoding()
             
-            let number = arc4random()
             
-            print(" commit date : \(number)")
+            /// 注意：从GPU到CPU，至少要2.5ms
+            commandBuffer.addCompletedHandler { [self] _ in
+                updateTargetsWithTexture(Texture(texture: outputTexture))
+                textureInputSemaphore.signal()
+            }
             
-            commandBuffer.addScheduledHandler {_ in print( "commandBuffer Scheduled\(number)")}
-                
-            
-            commandBuffer.addCompletedHandler { _ in print( "commandBuffer Completed\(number)") }
-
-            print("usedSize:\(textureHeap!.usedSize/(1024*1024))M,currentAllocatedSize:\(textureHeap!.currentAllocatedSize/(1024*1024))Msize:\(textureHeap!.size/(1024*1024))M")
             commandBuffer.commit()
             
             
@@ -118,7 +115,7 @@ class BasicComputeOperation: ImageProcessingOperation {
         // TODO: Finish implementation later
     }
     
-    func makeHeap(size:CGSize){
+    func createHeap(size:CGSize){
         
         let textureDescriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .bgra8Unorm,
                                                                          width: Int(size.width),
@@ -130,6 +127,7 @@ class BasicComputeOperation: ImageProcessingOperation {
         let heapDescriptor = MTLHeapDescriptor()
         heapDescriptor.cpuCacheMode = .defaultCache
         heapDescriptor.storageMode = .shared
+        //同一时间可能存在多个计算，预留足够的空间。
         heapDescriptor.size = sizeAndAlign.size * 3
         
         textureHeap = sharedContext.device.makeHeap(descriptor: heapDescriptor)
