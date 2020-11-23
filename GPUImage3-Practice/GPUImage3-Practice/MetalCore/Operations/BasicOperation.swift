@@ -11,7 +11,7 @@ import Metal
 
 open class BasicOperation: ImageProcessingOperation {
     
-    public let maximumInputs: UInt
+    public var maximumInputs: UInt
     public let targets = TargetContainer()
     public let sources = SourceContainer()
     

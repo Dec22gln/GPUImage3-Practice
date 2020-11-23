@@ -22,11 +22,11 @@ vertex SingleInputVertexIO oneInputVertex(device packed_float2 *position [[buffe
     return outputVertices;
 }
 
-fragment float4 passthroughFragment(SingleInputVertexIO fragmentInput [[stage_in]],
-                                   texture2d<float> inputTexture [[texture(0)]])
+fragment half4 passthroughFragment(SingleInputVertexIO fragmentInput [[stage_in]],
+                                   texture2d<half> inputTexture [[texture(0)]])
 {
     constexpr sampler quadSampler;
-    float4 color = inputTexture.sample(quadSampler, fragmentInput.textureCoordinate);
+    half4 color = inputTexture.sample(quadSampler, fragmentInput.textureCoordinate);
     
     return color;
 }

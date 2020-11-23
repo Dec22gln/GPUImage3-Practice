@@ -69,7 +69,7 @@ open class BasicHeapOperation: BasicOperation {
     
     func createHeap(size:CGSize ,textureDescriptor:MTLTextureDescriptor? = nil ){
         #if DEBUG
-        print("createHeap:\(size)")
+        print("createHeap:\(size) filter:\(self)")
         #endif
         var descriptor = textureDescriptor
         
