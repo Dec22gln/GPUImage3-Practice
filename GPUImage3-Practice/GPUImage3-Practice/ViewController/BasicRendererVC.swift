@@ -1,5 +1,5 @@
 //
-//  RendererVC.swift
+//  BasicRendererVC.swift
 //  GPUImage3-Practice
 //
 //  Created by 郭力楠 on 2020/11/19.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class RendererVC: UIViewController {
+class BasicRendererVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()

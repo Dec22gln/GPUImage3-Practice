@@ -78,7 +78,7 @@ class BasicComputeOperation: ImageProcessingOperation {
             let threadgroupsPerGrid = MTLSizeMake(groupCountWidth, groupCountHeight, 1)
               
             let textureDescriptor = MTLTextureDescriptor.init()
-            textureDescriptor.pixelFormat = MTLPixelFormat.r16Unorm
+            textureDescriptor.pixelFormat = MTLPixelFormat.bgra8Unorm
             textureDescriptor.width = outputWidth
             textureDescriptor.height = outputHeight
             textureDescriptor.usage = [.shaderRead,.shaderWrite,.renderTarget]

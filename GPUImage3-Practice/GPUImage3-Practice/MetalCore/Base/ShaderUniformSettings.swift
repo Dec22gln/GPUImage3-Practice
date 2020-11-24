@@ -151,6 +151,17 @@ public class ShaderUniformSettings {
             renderEncoder.setFragmentBuffer(uniformBuffer, offset: 0, index: 1)
         }
     }
+    
+    public func restoreShaderSettings(computeEncoder: MTLComputeCommandEncoder) {
+        shaderUniformSettingsQueue.sync {
+            guard (uniformValues.count > 0) else { return }
+            let uniformBuffer = sharedContext.device.makeBuffer(bytes: uniformValues,
+                                                                length: uniformValues.count * MemoryLayout<Float>.size,
+                                                                options: [])!
+            computeEncoder.setBuffer(uniformBuffer, offset: 0, index: 1)
+        }
+    }
+    
 }
 
 public protocol UniformConvertible {

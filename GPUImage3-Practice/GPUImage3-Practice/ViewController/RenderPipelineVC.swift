@@ -7,7 +7,7 @@
 
 import UIKit
 
-class RenderPipelineVC: RendererVC {
+class RenderPipelineVC: BasicRendererVC {
 
     let picture = PictureInput.init(imageName: "timg")
     
@@ -16,6 +16,11 @@ class RenderPipelineVC: RendererVC {
     let verticalTransform = VerticalTransformFilter()
     
     let names = ["旋转","原色"]
+    
+    var isTransform = false
+    var isOriginal = false
+    /// 滤镜数组
+    var filters = [BasicOperation]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,15 +36,11 @@ class RenderPipelineVC: RendererVC {
     }
     
     
-    var isTransform = false
-    var isOriginal = false
-    var filters = [BasicOperation]()
+
     
     override func buttonClick(sender: UIButton) {
-        picture.removeAllTargets()
         
-        for item in filters {item.removeAllTargets()}
-        filters.removeAll()
+        recoverOperation()
         
         switch sender.tag {
         case 0:
@@ -49,10 +50,17 @@ class RenderPipelineVC: RendererVC {
         default:
             break
         }
+        
         updateOperation()
         picture.processImage()
     }
     
+    func recoverOperation()  {
+        picture.removeAllTargets()
+        for item in filters {item.removeAllTargets()}
+        filters.removeAll()
+        
+    }
     
     func updateOperation()  {
         

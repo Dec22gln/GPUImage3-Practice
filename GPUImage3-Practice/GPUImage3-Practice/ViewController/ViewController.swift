@@ -14,11 +14,12 @@ struct item_vc {
 }
 
 
-class ViewController: RendererVC {
+class ViewController: BasicRendererVC {
 
     let tableView = UITableView()
-
-    let dataSource = [item_vc(title: "渲染", detail: "通过渲染管线 处理图像", vc:  RenderPipelineVC())]
+    
+    let dataSource = [item_vc(title: "渲染", detail: "通过渲染管线处理图像", vc:  RenderPipelineVC()),
+                      item_vc(title: "灰度边缘增强", detail: "计算管线，模拟器会崩溃", vc:  ComputePipelineVC())]
 
     override func viewDidLoad() {
         super.viewDidLoad()
