@@ -15,42 +15,47 @@ class RenderPipelineVC: BasicRendererVC {
     
     let verticalTransform = VerticalTransformFilter()
     
-    let names = ["旋转","原色"]
+    let names = ["旋转","灰窗"]
     
     var isTransform = false
-    var isOriginal = false
+    var isWindowLevels = true
+    
     /// 滤镜数组
     var filters = [BasicOperation]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        makeButtonWithTitles(titles: names)
-        makeSlider(count: 2)
-        
-        windowLevels.maxValue = 1
-        windowLevels.minValue = 0
-        
-        picture --> windowLevels --> mtkView
-        filters.append(windowLevels)
-        picture.processImage()
+        configVC()
     }
     
     
-
+    func configVC()  {
+        makeButtonWithTitles(titles: names)
+        makeSlider(count: 2)
+       
+        //控制 windowLevels.maxValue 。
+        let slider = sliders[0]
+        slider.value = 1
+        windowLevels.maxValue = 1
+        windowLevels.minValue = 0
+        
+        updateAndShowcase()
+    }
     
     override func buttonClick(sender: UIButton) {
-        
-        recoverOperation()
         
         switch sender.tag {
         case 0:
             isTransform = !isTransform
         case 1:
-            isOriginal = !isOriginal
+            isWindowLevels = !isWindowLevels
         default:
             break
         }
-        
+        updateAndShowcase()
+    }
+    
+    func updateAndShowcase()  {
         updateOperation()
         picture.processImage()
     }
@@ -64,12 +69,13 @@ class RenderPipelineVC: BasicRendererVC {
     
     func updateOperation()  {
         
+        recoverOperation()
+        
         if isTransform { filters.append(verticalTransform) }
-        if isOriginal == false { filters.append(windowLevels)}
+        if isWindowLevels { filters.append(windowLevels)}
         
         if filters.count < 1 {
             picture --> mtkView
-            return
         }else{
             picture --> filters.first!
             filters.last! --> mtkView

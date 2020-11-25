@@ -11,14 +11,13 @@ class ComputePipelineVC: BasicRendererVC {
 
     let picture = PictureInput.init(imageName: "timg")
     
-    let sharpeningCompute = EnhancementCompute()
+    let enhancement = EnhancementCompute()
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-        picture --> sharpeningCompute --> mtkView
+        picture --> enhancement --> mtkView
         picture.processImage()
     }
     

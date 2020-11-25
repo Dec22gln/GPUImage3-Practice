@@ -131,6 +131,6 @@ class BasicComputeOperation: ImageProcessingOperation {
         heapDescriptor.size = sizeAndAlign.size * 3
         
         textureHeap = sharedContext.device.makeHeap(descriptor: heapDescriptor)
-        
+           
     }
 }

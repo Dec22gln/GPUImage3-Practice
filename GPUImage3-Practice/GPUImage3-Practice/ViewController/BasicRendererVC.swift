@@ -46,7 +46,7 @@ class BasicRendererVC: UIViewController {
         
         for index in 0...titles.count-1 {
             let button = UIButton(type: UIButton.ButtonType.system)
-            button.frame = CGRect(x: 100 * index, y: 0, width: 100, height: 100)
+            button.frame = CGRect(x: 60 * index, y: 0, width: 60, height: 40)
             button.setTitle(titles[index], for: UIControl.State.normal)
             button.addTarget(self, action: #selector(buttonClick(sender:)), for: UIControl.Event.touchUpInside)
             button.tag = index
@@ -79,7 +79,7 @@ class BasicRendererVC: UIViewController {
     func makeSlider(count:Int) {
     
         for count in 0...count-1 {
-            let slider = UISlider(frame: CGRect(x: 0, y: 100 + 70 * count, width: Int(UIScreen.main.bounds.width), height: 60))
+            let slider = UISlider(frame: CGRect(x: 30, y: 40 + 60 * count, width: Int(UIScreen.main.bounds.width - 60), height: 60))
             self.mtkView.addSubview(slider)
             slider.maximumValue = 1.0
             slider.minimumValue = 0.0
