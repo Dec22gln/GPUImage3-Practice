@@ -11,7 +11,7 @@ import MetalKit
 
 class MPSImageFilterVC: BasicRendererVC {
     
-    let picture = PictureInput.init(imageName: "234")
+    let picture = PictureInput.init(imageName: "timg")
     
     let device = sharedContext.device
     
@@ -35,11 +35,11 @@ class MPSImageFilterVC: BasicRendererVC {
     override func buttonClick(sender: UIButton) {
         
         switch sender.tag {
-        case 0:showOrigi()
+        case 0: showOrigi()
             
-        case 1: process()
+        case 1: systemEqualization()
             
-        case 2: histogram()
+        case 2: myEqualization()
         default:
             break
         }
@@ -59,7 +59,7 @@ class MPSImageFilterVC: BasicRendererVC {
         let loader = MTKTextureLoader.init(device: device)
         
         do {
-            try sourceTexture = loader.newTexture(name: "234", scaleFactor: 1.0, bundle: .main, options:[MTKTextureLoader.Option.SRGB : false])
+            try sourceTexture = loader.newTexture(name: "timg", scaleFactor: 1.0, bundle: .main, options:[MTKTextureLoader.Option.SRGB : false])
             
             let textureDescriptor = MTLTextureDescriptor.init()
             textureDescriptor.pixelFormat = sourceTexture!.pixelFormat
@@ -96,19 +96,19 @@ class MPSImageFilterVC: BasicRendererVC {
         minPixelValue: vector_float4(0,0,0,0),
         maxPixelValue: vector_float4(1,1,1,1))
     
-    
-    func histogram()  {
+    //参考简书落影大佬的实现，统计依然使用MPS。swift 没有
+    func myEqualization()  {
         
         let calculation = MPSImageHistogram(device: device,
                                             histogramInfo: &histogramInfo)
         
         let bufferLength = calculation.histogramSize(forSourceFormat: sourceTexture!.pixelFormat)
-        
+        //统计buffer
         guard let histogramInfoBuffer = device.makeBuffer(length: bufferLength,
                                                           options: [.storageModeShared])else {
             fatalError("Could not create histogramInfoBuffer")
         }
-        
+        //颜色转换buffer
         guard let histogramConvertBuffer = device.makeBuffer(length: bufferLength,
                                                           options: [.storageModeShared])else {
             fatalError("Could not create histogramInfoBuffer")
@@ -127,9 +127,10 @@ class MPSImageFilterVC: BasicRendererVC {
         commandBuffer.addCompletedHandler { [self] (buffer) in
             
             let sum = self.sourceTexture!.width * self.sourceTexture!.height // 总的像素点
+            //受够了swift的指针！！！
             ConvertBuffer.convertbuffer(histogramInfoBuffer.contents(), convertBuffer: histogramConvertBuffer.contents(), sum: Int32(sum))
     
-            
+            //GPUImage 传buffer不太灵活，这里直接存到预定纹理中
             histFilter.colorTable.internalTexture!.texture.replace(region: MTLRegion(origin: MTLOrigin(x: 0, y: 0, z: 0) ,size: MTLSize(width: 256, height: 3, depth: 1)), mipmapLevel: 0, withBytes:histogramConvertBuffer.contents() , bytesPerRow: 256 * 4)
             
             picture.removeAllTargets()
@@ -141,8 +142,8 @@ class MPSImageFilterVC: BasicRendererVC {
         commandBuffer.commit()
         
     }
-    
-    func process()  {
+    //MPS的均衡化，真机连线debug会崩溃
+    func systemEqualization()  {
         
         let calculation = MPSImageHistogram(device: device,
                                             histogramInfo: &histogramInfo)
