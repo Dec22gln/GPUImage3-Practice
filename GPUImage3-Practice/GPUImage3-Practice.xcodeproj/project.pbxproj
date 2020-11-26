@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		534B3750256E4C1F00BA7E08 /* ColorSwizzleFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534B374F256E4C1F00BA7E08 /* ColorSwizzleFilter.swift */; };
+		534B3754256E568700BA7E08 /* HistogramEqualizationFilter.metal in Sources */ = {isa = PBXBuildFile; fileRef = 534B3753256E568700BA7E08 /* HistogramEqualizationFilter.metal */; };
+		534B3757256E569200BA7E08 /* HistogramEqualizationFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534B3756256E569200BA7E08 /* HistogramEqualizationFilter.swift */; };
+		534B3783256FB00600BA7E08 /* ConvertBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 534B3782256FB00600BA7E08 /* ConvertBuffer.m */; };
 		53AC3DFA256B8C5C005D5AF3 /* RenderPipelineVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53AC3DF9256B8C5C005D5AF3 /* RenderPipelineVC.swift */; };
 		53AC3DFD256B9F2F005D5AF3 /* ComputePipelineVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53AC3DFC256B9F2F005D5AF3 /* ComputePipelineVC.swift */; };
 		53AC3E06256CFB02005D5AF3 /* EnhancementCompute.metal in Sources */ = {isa = PBXBuildFile; fileRef = 53AC3E04256CFB02005D5AF3 /* EnhancementCompute.metal */; };
@@ -45,6 +49,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		534B374F256E4C1F00BA7E08 /* ColorSwizzleFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorSwizzleFilter.swift; sourceTree = "<group>"; };
+		534B3753256E568700BA7E08 /* HistogramEqualizationFilter.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = HistogramEqualizationFilter.metal; sourceTree = "<group>"; };
+		534B3756256E569200BA7E08 /* HistogramEqualizationFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistogramEqualizationFilter.swift; sourceTree = "<group>"; };
+		534B3780256FB00600BA7E08 /* GPUImage3-Practice-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GPUImage3-Practice-Bridging-Header.h"; sourceTree = "<group>"; };
+		534B3781256FB00600BA7E08 /* ConvertBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConvertBuffer.h; sourceTree = "<group>"; };
+		534B3782256FB00600BA7E08 /* ConvertBuffer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConvertBuffer.m; sourceTree = "<group>"; };
 		53AC3DF9256B8C5C005D5AF3 /* RenderPipelineVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderPipelineVC.swift; sourceTree = "<group>"; };
 		53AC3DFC256B9F2F005D5AF3 /* ComputePipelineVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputePipelineVC.swift; sourceTree = "<group>"; };
 		53AC3E04256CFB02005D5AF3 /* EnhancementCompute.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = EnhancementCompute.metal; sourceTree = "<group>"; };
@@ -165,17 +175,23 @@
 		53E6246525665528008EA029 /* MetalShader */ = {
 			isa = PBXGroup;
 			children = (
-				53AC3E0B256CFB8B005D5AF3 /* PublicComputeKernel.metal */,
-				53AC3E09256CFB30005D5AF3 /* GpuComputeKernelHeader.h */,
+				53E624E8256660B4008EA029 /* ColorSwizzle.metal */,
+				534B374F256E4C1F00BA7E08 /* ColorSwizzleFilter.swift */,
 				53AC3E04256CFB02005D5AF3 /* EnhancementCompute.metal */,
 				53AC3E05256CFB02005D5AF3 /* EnhancementCompute.swift */,
-				53E624E8256660B4008EA029 /* ColorSwizzle.metal */,
+				53AC3E09256CFB30005D5AF3 /* GpuComputeKernelHeader.h */,
 				53E6247125665528008EA029 /* Passthrough.metal */,
+				53AC3E0B256CFB8B005D5AF3 /* PublicComputeKernel.metal */,
 				53E6246F25665528008EA029 /* ShaderType.h */,
 				53E6246725665528008EA029 /* VerticalTransformFilter.metal */,
 				53E6247D25665528008EA029 /* VerticalTransformFilter.swift */,
 				53E6246625665528008EA029 /* WindowLevelsFilter.metal */,
 				53E6247C25665528008EA029 /* WindowLevelsFilter.swift */,
+				534B3753256E568700BA7E08 /* HistogramEqualizationFilter.metal */,
+				534B3756256E569200BA7E08 /* HistogramEqualizationFilter.swift */,
+				534B3781256FB00600BA7E08 /* ConvertBuffer.h */,
+				534B3782256FB00600BA7E08 /* ConvertBuffer.m */,
+				534B3780256FB00600BA7E08 /* GPUImage3-Practice-Bridging-Header.h */,
 			);
 			path = MetalShader;
 			sourceTree = "<group>";
@@ -253,6 +269,7 @@
 				TargetAttributes = {
 					53E62446256654E7008EA029 = {
 						CreatedOnToolsVersion = 12.2;
+						LastSwiftMigration = 1220;
 					};
 				};
 			};
@@ -297,6 +314,7 @@
 				53E624A625665528008EA029 /* VerticalTransformFilter.metal in Sources */,
 				53AC3E14256DFAEE005D5AF3 /* MPSImageFilterVC.swift in Sources */,
 				53E624CC25665528008EA029 /* RenderView.swift in Sources */,
+				534B3757256E569200BA7E08 /* HistogramEqualizationFilter.swift in Sources */,
 				53E624BA25665528008EA029 /* VerticalTransformFilter.swift in Sources */,
 				53E624D325665528008EA029 /* Pipeline.swift in Sources */,
 				53E624D525665528008EA029 /* FillMode.swift in Sources */,
@@ -308,10 +326,12 @@
 				53E624D225665528008EA029 /* Color.swift in Sources */,
 				53AC3E07256CFB02005D5AF3 /* EnhancementCompute.swift in Sources */,
 				53E624D625665528008EA029 /* Texture.swift in Sources */,
+				534B3783256FB00600BA7E08 /* ConvertBuffer.m in Sources */,
 				53E624B125665528008EA029 /* BasicHeapOperation.swift in Sources */,
 				53E624E3256659D2008EA029 /* BasicComputeOperation.swift in Sources */,
 				53E624D025665528008EA029 /* Matrix.swift in Sources */,
 				53AC3DFA256B8C5C005D5AF3 /* RenderPipelineVC.swift in Sources */,
+				534B3754256E568700BA7E08 /* HistogramEqualizationFilter.metal in Sources */,
 				53E624AF25665528008EA029 /* Passthrough.metal in Sources */,
 				53AC3E06256CFB02005D5AF3 /* EnhancementCompute.metal in Sources */,
 				53E6244D256654E7008EA029 /* SceneDelegate.swift in Sources */,
@@ -319,6 +339,7 @@
 				53E624CF25665528008EA029 /* ShaderUniformSettings.swift in Sources */,
 				53E624D725665528008EA029 /* PictureInput.swift in Sources */,
 				53AC3E0C256CFB8B005D5AF3 /* PublicComputeKernel.metal in Sources */,
+				534B3750256E4C1F00BA7E08 /* ColorSwizzleFilter.swift in Sources */,
 				53E624E02566568F008EA029 /* BasicRendererVC.swift in Sources */,
 				53E624A525665528008EA029 /* WindowLevelsFilter.metal in Sources */,
 				53E624CD25665528008EA029 /* Constants.swift in Sources */,
@@ -470,6 +491,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = N6D9A5K3PR;
 				INFOPLIST_FILE = "GPUImage3-Practice/Info.plist";
@@ -480,6 +502,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "ink.guolinan.GPUImage3-Practice";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "GPUImage3-Practice/MetalCore/Operations/MetalShader/GPUImage3-Practice-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -490,6 +514,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = N6D9A5K3PR;
 				INFOPLIST_FILE = "GPUImage3-Practice/Info.plist";
@@ -500,6 +525,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "ink.guolinan.GPUImage3-Practice";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "GPUImage3-Practice/MetalCore/Operations/MetalShader/GPUImage3-Practice-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

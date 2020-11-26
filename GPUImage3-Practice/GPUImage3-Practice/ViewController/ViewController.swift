@@ -20,7 +20,7 @@ class ViewController: BasicRendererVC {
     
     let dataSource = [item_vc(title: "渲染", detail: "通过渲染管线处理图像", vc:  RenderPipelineVC()),
                       item_vc(title: "灰度边缘增强", detail: "计算管线，模拟器会崩溃", vc:  ComputePipelineVC()),
-                      item_vc(title: "官方滤镜", detail: "高度优化的常用滤镜", vc:  MPSImageFilterVC())]
+                      item_vc(title: "直方图均衡", detail: "MPS真机会崩,模拟器不会", vc:  MPSImageFilterVC())]
 
     override func viewDidLoad() {
         super.viewDidLoad()

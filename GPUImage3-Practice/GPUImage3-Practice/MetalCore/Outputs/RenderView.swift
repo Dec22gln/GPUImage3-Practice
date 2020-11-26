@@ -70,7 +70,6 @@ extension RenderView: ImageConsumer {
     
     public func newTextureAvailable(_ texture: Texture, fromSourceIndex: UInt) {
         currentTexture = texture
-        
         metalView.draw()
     }
 }

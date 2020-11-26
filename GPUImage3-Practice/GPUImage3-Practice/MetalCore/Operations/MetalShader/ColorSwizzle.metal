@@ -12,3 +12,4 @@ fragment half4 colorSwizzleFragment(SingleInputVertexIO fragmentInput [[stage_in
     
     return color;
 }
+

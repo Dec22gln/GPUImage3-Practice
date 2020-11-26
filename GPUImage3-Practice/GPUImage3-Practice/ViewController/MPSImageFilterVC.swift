@@ -11,21 +11,23 @@ import MetalKit
 
 class MPSImageFilterVC: BasicRendererVC {
     
-    let picture = PictureInput.init(imageName: "timg")
+    let picture = PictureInput.init(imageName: "234")
     
     let device = sharedContext.device
     
     var sourceTexture:MTLTexture?
     var destinationTexture:MTLTexture?
     
-    let names = ["原图","均衡"]
+    let names = ["原图","MPS","手动"]
+    
+    let histFilter = HistogramEqualizationFilter()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         makeButtonWithTitles(titles: names)
-        
         loadTexture()
+        
         picture --> mtkView
         picture.processImage()
     }
@@ -34,9 +36,10 @@ class MPSImageFilterVC: BasicRendererVC {
         
         switch sender.tag {
         case 0:showOrigi()
-          
+            
         case 1: process()
             
+        case 2: histogram()
         default:
             break
         }
@@ -44,7 +47,11 @@ class MPSImageFilterVC: BasicRendererVC {
     }
     
     func showOrigi() {
+        picture.removeAllTargets()
+        histFilter.removeAllTargets()
         picture.updaTexture(texture: sourceTexture!)
+        
+        picture --> mtkView
         picture.processImage()
     }
     
@@ -52,7 +59,7 @@ class MPSImageFilterVC: BasicRendererVC {
         let loader = MTKTextureLoader.init(device: device)
         
         do {
-            try sourceTexture = loader.newTexture(name: "timg", scaleFactor: 1.0, bundle: .main, options: nil)
+            try sourceTexture = loader.newTexture(name: "234", scaleFactor: 1.0, bundle: .main, options:[MTKTextureLoader.Option.SRGB : false])
             
             let textureDescriptor = MTLTextureDescriptor.init()
             textureDescriptor.pixelFormat = sourceTexture!.pixelFormat
@@ -69,10 +76,11 @@ class MPSImageFilterVC: BasicRendererVC {
     }
     
     /*
-     在连线进行调试的时候 numberOfHistogramEntries: 256 会出现一个奇怪的断言：
-     failed assertion `offset(4096) must be < [buffer length](4096). 拔了线再跑发现一切正常。
+     在真机连线进行调试的时候 ，numberOfHistogramEntries = 256 会出现一个奇怪的断言：
+     failed assertion `offset(4096) must be < [buffer length](4096).不再调试的时候打开，惊奇发现一切正常。
      
      在Stack Overflow中有人遇到相同的问题：
+     
      这似乎是 MPSImageHistogramEqualization 中专用路径中的错误。
      当 numberOfHistogramEntries大于256时，图像内核会分配一个内部缓冲区，
      该缓冲区足够大以容纳需要处理的数据（对于N = 512，这是8192字节），加上额外的空间（32个字节）。
@@ -88,6 +96,52 @@ class MPSImageFilterVC: BasicRendererVC {
         minPixelValue: vector_float4(0,0,0,0),
         maxPixelValue: vector_float4(1,1,1,1))
     
+    
+    func histogram()  {
+        
+        let calculation = MPSImageHistogram(device: device,
+                                            histogramInfo: &histogramInfo)
+        
+        let bufferLength = calculation.histogramSize(forSourceFormat: sourceTexture!.pixelFormat)
+        
+        guard let histogramInfoBuffer = device.makeBuffer(length: bufferLength,
+                                                          options: [.storageModeShared])else {
+            fatalError("Could not create histogramInfoBuffer")
+        }
+        
+        guard let histogramConvertBuffer = device.makeBuffer(length: bufferLength,
+                                                          options: [.storageModeShared])else {
+            fatalError("Could not create histogramInfoBuffer")
+        }
+        
+        
+        guard let commandBuffer = sharedContext.commandQueue.makeCommandBuffer()else {
+            fatalError("Could not create commandBuffer")
+        }
+        
+        calculation.encode(to: commandBuffer,
+                           sourceTexture: sourceTexture!,
+                           histogram: histogramInfoBuffer,
+                           histogramOffset: 0)
+        
+        commandBuffer.addCompletedHandler { [self] (buffer) in
+            
+            let sum = self.sourceTexture!.width * self.sourceTexture!.height // 总的像素点
+            ConvertBuffer.convertbuffer(histogramInfoBuffer.contents(), convertBuffer: histogramConvertBuffer.contents(), sum: Int32(sum))
+    
+            
+            histFilter.colorTable.internalTexture!.texture.replace(region: MTLRegion(origin: MTLOrigin(x: 0, y: 0, z: 0) ,size: MTLSize(width: 256, height: 3, depth: 1)), mipmapLevel: 0, withBytes:histogramConvertBuffer.contents() , bytesPerRow: 256 * 4)
+            
+            picture.removeAllTargets()
+            histFilter.removeAllTargets()
+            picture --> histFilter --> mtkView
+            picture.processImage()
+        }
+        
+        commandBuffer.commit()
+        
+    }
+    
     func process()  {
         
         let calculation = MPSImageHistogram(device: device,
@@ -96,7 +150,7 @@ class MPSImageFilterVC: BasicRendererVC {
         let bufferLength = calculation.histogramSize(forSourceFormat: sourceTexture!.pixelFormat)
         
         guard let histogramInfoBuffer = device.makeBuffer(length: bufferLength,
-                                                    options: [.storageModePrivate])else {
+                                                          options: [.storageModePrivate])else {
             fatalError("Could not create histogramInfoBuffer")
         }
         
@@ -116,6 +170,9 @@ class MPSImageFilterVC: BasicRendererVC {
         equalization.encode(commandBuffer: commandBuffer, sourceTexture: sourceTexture!, destinationTexture: destinationTexture!)
         
         commandBuffer.addCompletedHandler { [self] (buffer) in
+            picture.removeAllTargets()
+            histFilter.removeAllTargets()
+            picture --> mtkView
             picture.updaTexture(texture: destinationTexture!)
             picture.processImage()
         }
