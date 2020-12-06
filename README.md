@@ -1,5 +1,5 @@
 # GPUImage3-Practice
-
+研究学习 GPUImage3 和 metal 。 
 ## Metal ##
 Metal 是一个和 OpenGL ES 类似的面向底层的图形编程接口，可以直接操作GPU；支持iOS和OS X，提供图形渲染和通用计算能力。（现已支持模拟器）
 
