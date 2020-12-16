@@ -17,10 +17,11 @@ MacOS Big Sur发布后就迫不及待的更新体验了，顺带的Xcode也更�
 - 流程描述：
 图片（PictureInput）-->n个滤镜（Operations）-->输出（RenderView）
 
-## TODO ##
+## practice ##
 
 ### shader ###
 从GPUImage3中抽离出图像的部分，只研究学习如何使用Metal在App中做图像的处理。其中MetalShader可以从[GPUImage3](https://github.com/BradLarson/GPUImage3)中找到实现。
+
 ### 性能优化 ###
 客户端的渲染在优化性能方面包括以下几部分工作：
 - 选择正确的分辨率
@@ -42,6 +43,10 @@ commandBuffer.addCompletedHandler { [self] _ in
                 textureInputSemaphore.signal()
 }
 ```
+## TODO ##
 
 ### 内存占用优化 ###
 每个Operation，或者说每个滤镜都会至少持有一个纹理。在高频率的渲染时，每个滤镜需要预先创建多个output纹理在队列中排队。也就是内存占用峰值将达到 （位图大小 * 滤镜数 * 3）。即使使用了MTLHeap已达到复用的目的也依然居高不下。
+
+### CoreML ###
+尝试使用开源或苹果已经训练好的模型。
